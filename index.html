@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Document</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
+        <style>
+            body{
+                background: #000;
+            }
+            .g_tbdr{
+                border: 1px dashed #000;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <canvas class="myCanvas g_tbdr mx-auto d-block overflow-hidden"></canvas>
+        <img src="./img/rockethome-sheet0.png" width="201" height="289" id="heart_13" style="display:none;">
+    
+        <script>
+            let canvas = document.querySelector(".myCanvas")
+            // Set the canvas dimensions
+            canvas.width = 993;
+            canvas.height = 743;
+            var ctx = canvas.getContext('2d');
+
+            // Create the first image element
+            var image1 = new Image();
+
+            // Set the source of the image
+            image1.src = 'img/skybg2.png';
+
+            // When the first image is loaded, draw it on the canvas
+            image1.onload = function() {
+                ctx.drawImage(image1, 0, 0, canvas.width, canvas.height);
+            };
+
+            // Create the second image element
+            var image2 = new Image();
+            //image2.src = './img/home.png';
+
+            // When the second image is loaded, draw it on the canvas
+            image2.onload = function() {
+                ctx.drawImage(image2, 5, 300, canvas.width, canvas.height);
+            };
+
+            // Create the third image element
+            var image3 = new Image();
+            image3.src = './img/moon2-sheet0.png';
+
+            image3.style.zIndex = "1";
+
+            // Set the desired image size
+            var imageSize3 = {
+                width: 550,
+                height: 550
+            };
+
+            // When the fifth image is loaded, draw it on the canvas
+            image3.onload = function() {
+                ctx.drawImage(image3, 200, 10,imageSize3.width, imageSize3.height);
+            };
+
+            // Create the fourth image element
+            var image4 = new Image();
+            image4.src = './img/heading-sheet0.png';
+
+            // Set the desired image size
+            var imageSize1 = {
+                width: 200,
+                height: 150
+            };
+
+            //* When the third image is loaded, draw it on the canvas
+            image4.onload = function() {
+                ctx.drawImage(image4, 370, 190, imageSize1.width, imageSize1.height);
+            };
+
+            // Create the fifth image element
+            var image5 = new Image();
+            image5.src = './img/rockethome-sheet0.png';
+
+            // Set the desired image size
+            var imageSize8 = {
+                width: 100,
+                height: 190
+            };
+
+            //* When the fifth image is loaded, draw it on the canvas
+            image5.onload = function() {
+                ctx.drawImage(image5, 370, 190, imageSize8.width, imageSize8.height);
+            };
+
+
+
+            // Create the start button element
+            var startButton = document.createElement("button");
+            startButton.textContent = "START";
+            startButton.style.position = "absolute";
+            startButton.style.top = "65%";
+            startButton.style.left = "65%";
+            startButton.style.transform = "translate(-50%, -50%)";
+
+            // Add onclick event listener to the start button
+            startButton.onclick = function() {
+                // Code to be executed when the button is clicked
+                alert("Button clicked!");
+                // Clear the canvas
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                
+                // Redraw the background image
+                ctx.drawImage(image1, 0, 0, canvas.width, canvas.height);
+                ctx.drawImage(image2, 0, 0, canvas.width, canvas.height);
+
+                // Remove the button from the DOM
+                    startButton.remove();
+                    createImage();
+            };
+            
+
+                let createImage = ()=>{
+                    var areImagesVisible = true;
+                    // Create image elements
+                    var image11 = new Image();
+                    image11.src = "./img/easy-sheet0.png";
+
+                    var image12 = new Image();
+                    image12.src = "./img/medium-sheet0.png";
+
+                    var image13 = new Image();
+                    image13.src = "./img/hard-sheet0.png";
+
+                    // Set initial values for image positions
+                    var x11 = 50;
+                    var y11 = 50;
+                    var x12 = 300;
+                    var y12 = 200;
+                    var x13 = 300;
+                    var y13 = 500;
+
+
+                    // Set image onload event handlers
+                    image11.onload = function() {
+                    // Draw the first image at position (x11, y11)
+                    ctx.drawImage(image11, x11, y11);
+                    };
+
+                    image12.onload = function() {
+                    // Draw the second image at position (x12, y12)
+                    ctx.drawImage(image12, x12, y12);
+                    };
+
+                    image13.onload = function() {
+                    // Draw the third image at position (x13, y13)
+                    ctx.drawImage(image13, x13, y13);
+                    };
+
+                    // Handle mouse click event
+                    canvas.addEventListener("click", function(event) {
+                    var rect = canvas.getBoundingClientRect();
+                    var mouseX = event.clientX - rect.left;
+                    var mouseY = event.clientY - rect.top;
+
+                    // Check if the click is within the image bounds
+                    if (
+                        mouseX > x11 && mouseX < x11 + image11.width &&
+                        mouseY > y11 && mouseY < y11 + image11.height
+                    ) {
+                        // First image was clicked, perform the desired action
+                        alert("Easy clicked!");
+                    } else if (
+                        mouseX > x12 && mouseX < x12 + image12.width &&
+                        mouseY > y12 && mouseY < y12 + image12.height
+                    ) {
+                        // Second image was clicked, perform the desired action
+                        alert("Medium clicked!");
+                    } else if (
+                        mouseX > x13 && mouseX < x13 + image13.width &&
+                        mouseY > y13 && mouseY < y13 + image13.height
+                    ) {
+                        // Third image was clicked, perform the desired action
+                        alert("Hard clicked!");
+                        
+                    }
+                    // Hide all images and display only the background
+                    areImagesVisible = false;
+                    drawBackground();   
+                    mainPage();
+                    });
+                }
+                
+                // Redraw the background image
+                function drawBackground() {
+                    ctx.drawImage(image1, 0, 0, canvas.width, canvas.height);
+                    ctx.drawImage(image2, 0, 0, canvas.width, canvas.height);
+                }
+                
+                
+
+                
+
+    
+            
+                
+                // Set the size of the image within the button
+                var imageWidth = 160; // Set the desired width of the image
+                var imageHeight = 70; // Set the desired height of the image
+                startButton.style.width = imageWidth + "px";
+                startButton.style.height = imageHeight + "px";
+
+                // Set the font style of the text
+                startButton.style.fontFamily = "Arial"; // Set the desired font family
+                startButton.style.fontSize = "40px"; // Set the desired font size
+                startButton.style.fontWeight = "bold"; // Set the desired font weight
+                startButton.style.color = "white"; // Set the desired font color
+                startButton.style.border = "none"
+
+                // Set the background color of the button to transparent
+                startButton.style.backgroundColor = "transparent";
+
+                // Define the movement animation
+                var intervalId;
+                var position = 10;
+                var direction = 10;
+                var step = 0.3; // Adjust the step size as desired            
+
+                function moveButton() {
+                position += step * direction;
+                startButton.style.left = position + "px";
+                
+                // Reverse the direction when reaching the right edge of the canvas
+                if (position > canvas.width - startButton.offsetWidth) {
+                    direction = -2;
+                }
+                
+                // Reverse the direction when reaching the left edge of the canvas
+                if (position <= 1000) {
+                    direction = 3;
+                }
+                }
+
+                // Start the movement animation
+                intervalId = setInterval(moveButton, 0.00001); // Adjust the interval duration as desired (in milliseconds)
+
+                // Add an event listener to the start button
+                startButton.addEventListener("click", function() {
+                // Stop the movement animation
+                clearInterval(intervalId);
+                // Start the game or perform game-related actions
+                });
+
+                // Add an event listener to the start button
+                startButton.addEventListener("click", function() {
+                // Start the game or perform game-related actions
+                });
+
+                // Append the start button to the canvas
+                canvas.parentNode.appendChild(startButton)
+
+
+
+                
+
+                // let mainPage = ()=>{
+                //     // Create the rocket image
+                //     var rocket = new Image();
+                //     rocket.src = "img/rockethome-sheet0.png";
+
+                //     // Set the initial position of the rocket
+                //     var rocketX = canvas.width / 2 - rocket.width / 2;
+                //     var rocketY = canvas.height;
+
+                //     // Set the speed of the rocket
+                //     var rocketSpeed = 2;
+
+                //     // Draw the rocket on the canvas
+                //     function drawRocket() {
+                //     ctx.drawImage(rocket, rocketX, rocketY);
+                //     }
+
+                //     // Update the position of the rocket
+                //     function updateRocket() {
+                //     rocketY -= rocketSpeed;
+                //     }
+
+                //     // Clear the canvas
+                //     function clearCanvas() {
+                //     ctx.clearRect(0, 0, canvas.width, canvas.height);
+                //     }
+
+                //     // Animation loop
+                //     function animate() {
+                //     clearCanvas();
+                //     updateRocket();
+                //     drawRocket();
+
+                //     requestAnimationFrame(animate);
+                //     }
+
+                //     // Start the animation
+                //     rocket.onload = function() {
+                //     animate();
+                //     };
+                // }
+
+
+                
+
+
+
+                //audio
+
+                // Create an HTML audio element and set the source of the audio file
+                const audio = new Audio('./sounds/rocket-phonk-music-141359.mp3');
+
+                // Play the audio when the page has loaded
+                window.addEventListener('load', () => {
+                audio.play();
+                });
+
+                //Draw on the canvas
+                context.fillStyle = 'red';
+                context.fillRect(50, 50, 100, 100);
+
+
+
+        </script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
+    </body>
+</html>

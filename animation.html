@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <style>
+    * {
+      padding: 0;
+      margin: 0;
+    }
+
+    body {
+      background-color: #000;
+    }
+
+    canvas {
+      display: block;
+      margin: auto;
+      border: 1px solid #000;
+    }
+  </style>
+</head>
+
+<body>
+  <canvas id="animationCanvas"></canvas>
+  <audio id="explosionSound" src="explosion_sound.mp3"></audio>
+  <script>
+    // Initialize canvas and context
+    const canvas = document.getElementById('animationCanvas');
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+    const ctx = canvas.getContext('2d');
+    const explosionSound = document.getElementById('explosionSound');
+
+    const particles = [];
+
+    // background images
+    const backgroundImage = new Image();
+    backgroundImage.src = 'images/skybg1.png';
+
+      // Create start/pause button
+        const startPauseButton = document.createElement('button');
+        startPauseButton.textContent = 'Paused';
+        startPauseButton.style.position = 'absolute';
+        startPauseButton.style.top = '25px';
+        startPauseButton.style.fontFamily = 'Comic Sans MS';
+        startPauseButton.style.left = '150px';
+        startPauseButton.style.color = 'white';
+        startPauseButton.style.background = 'Coral';
+        document.body.appendChild(startPauseButton);
+
+       
+
+
+
+        // Create sound button
+        const soundButton = document.createElement('button');
+        soundButton.textContent = 'Sound Off';
+        soundButton.style.position = 'absolute';
+        soundButton.style.top = '25px';
+        soundButton.style.fontFamily = 'Comic Sans MS';
+        soundButton.style.left = '220px';
+        soundButton.style.color = 'white';
+        soundButton.style.background = 'Maroon';
+        document.body.appendChild(soundButton);
+
+          
+      
+
+
+    // Function to play explosion sound
+    function playExplosionSound() {
+      explosionSound.currentTime = 0;
+      explosionSound.play();
+    }
+    
+
+
+
+    // water
+    const water = new Image();
+    water.src = 'images/waternew.png';
+
+    const waterWidth = canvas.width;
+    const waterHeight = canvas.height / 2 - 230;
+    let waterX = canvas.width - waterWidth;
+    let waterY = canvas.height - waterHeight;
+
+    // Variables for water animation
+    var waterOffset = 0;
+    var waterSpeed = 1;
+
+    // Define boat images and properties
+    const boatImage1 = new Image();
+    boatImage1.src = 'images/boat-sheet0.png'; // Replace 'boat.png' with your boat image path
+    const boatImage2 = new Image();
+    boatImage2.src = 'images/boat2-sheet0.png'; // Replace 'boat.png' with your boat image path
+    const boatWidth = 100;
+    const boatHeight = 40;
+    const boatSpeed = 1;
+    const boatYPositions = [600, 650]; // Y positions for multiple boats
+    let boatX = -boatWidth; // Start boats off-screen
+    let boatY = -boatWidth + 100; // Start boats off-screen
+
+    //-----------------------------------------------------------------------//
+
+    // Load Rocket images
+    const rocketImage = new Image();
+    rocketImage.src = 'images/rocket.png';
+
+    // Set up game objects
+    const rockets = [];
+    const rocketSize = 80;
+    const rocketSpeed = 1;
+    let score = 0;
+
+    // Game configuration
+    var duration = 30; // Duration of the game in seconds
+
+    
+
+
+    /*************************************************************************/
+
+    // Function to create fireworks explosion animation
+    function explodeFireworks(x, y) {
+      const numParticles = 100; // Number of particles in the explosion
+
+      // Create particle objects
+      for (let i = 0; i < numParticles; i++) {
+        const particle = {
+          x,
+          y,
+          size: Math.random() * 5 + 1, // Random size between 1 and 6
+          speedX: Math.random() * 3 - 1.5, // Random horizontal speed between -1.5 and 1.5
+          speedY: Math.random() * -15 - 5, // Random vertical speed between -5 and -20
+          color: `hsl(${Math.random() * 360}, 50%, 50%)`, // Random color
+        };
+        particles.push(particle);
+      }
+
+      // Start the explosion animation
+      animateExplosion();
+    }
+
+    // Animate the explosion
+    function animateExplosion() {
+      particles.forEach(particle => {
+        particle.x += particle.speedX;
+        particle.y += particle.speedY;
+        particle.speedY += 0.6; // Gravity
+        ctx.beginPath();
+        ctx.arc(particle.x, particle.y, particle.size, 0, Math.PI * 2);
+        ctx.fillStyle = particle.color;
+        ctx.fill();
+      });
+
+      // Request next frame
+      // requestAnimationFrame(animateExplosion);
+    }
+    
+
+
+    // Function to create a new rocket
+    function createrocket() {
+      const rocket = {
+        x: Math.random() * (canvas.width - rocketSize),
+        y: canvas.height,
+        letter: String.fromCharCode(65 + Math.floor(Math.random() * 26)), // Generate random letter
+      };
+      rockets.push(rocket);
+    }
+
+    // Function to update game objects
+    function update() {
+      // Move rockets
+      for (let i = 0; i < rockets.length; i++) {
+        rockets[i].y -= rocketSpeed;
+
+        // Remove rocket if it goes off the screen
+        if (rockets[i].y < -rocketSize) {
+          rockets.splice(i, 1);
+          i--;
+        }
+      }
+
+      if (Math.random() < 0.006) {
+        createrocket();
+      }
+    }
+
+    
+
+    // Function for background animation
+    function backgroundAmimation() {
+      // Draw background image
+      ctx.drawImage(backgroundImage, 0, 0, canvas.width, canvas.height);
+
+      // Draw water image
+      // Move Water
+      waterOffset -= waterSpeed; // Update the water offset
+      // Draw the image repeatedly with offset positions to create the flowing effect
+      ctx.globalAlpha = 0.6;
+      ctx.drawImage(water, waterX, waterY, waterWidth, waterHeight);
+      ctx.globalAlpha = 1;
+
+      // Update and draw boats
+      ctx.drawImage(boatImage1, boatX, boatYPositions[0], boatWidth, boatHeight);
+      ctx.drawImage(boatImage2, boatY, boatYPositions[1], boatWidth, boatHeight);
+
+      
+
+      // Move the boats from left to right
+      boatX += boatSpeed + 1;
+      boatY += boatSpeed;
+      // waterX-= boatSpeed;
+
+      if (boatX > canvas.width) {
+        boatX = -boatWidth;
+      }
+
+      if (boatY > canvas.width) {
+        boatY = -boatWidth;
+      }
+    }
+    
+    // Draw rockets
+    function drawRocket(){
+      for (let i = 0; i < rockets.length; i++) {
+        ctx.drawImage(rocketImage, rockets[i].x, rockets[i].y, rocketSize, rocketSize * 2);
+        
+        // Draw letter inside rocket
+        ctx.font = '30px Arial';
+        ctx.fillStyle = '#fff';
+        ctx.textAlign = 'center';
+        ctx.fillText(rockets[i].letter, rockets[i].x + rocketSize / 2, rockets[i].y + rocketSize + 7);
+      }
+    }
+
+    // Draw score
+    function drawScore(){
+      ctx.font = '20px Arial';
+      ctx.fillStyle = '#fff';
+      ctx.fillText('Score: ' + score * 10, 50, 30);
+    }
+
+    // clear canvas
+    function clearCanvas(){
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    }
+
+
+    
+    // Animation loop
+    function animate() {
+      clearCanvas();
+      backgroundAmimation();
+      drawRocket();
+      drawScore();
+    }
+
+    // Game loop
+    function gameLoop() {
+      update();
+      animate();
+      animateExplosion();
+      requestAnimationFrame(gameLoop);
+    }
+
+    // Start the game loop
+    gameLoop();
+
+    // Function to handle key press events
+    function handleKeyPress(event) {
+      const rect = canvas.getBoundingClientRect();
+      console.log('rockets', rockets);
+      const typedLetter = String.fromCharCode(event.keyCode).toUpperCase();
+      console.log('typedLetter', typedLetter);
+
+      for (let i = 0; i < rockets.length; i++) {
+        if (rockets[i].letter === typedLetter) {
+          explodeFireworks(rockets[i].x, rockets[i].y);
+          // Play explosion sound
+          playExplosionSound();
+          rockets.splice(i, 1); // Remove rocket if typed letter matches
+          score++;
+          break;
+        }
+      }
+    }
+
+    
+
+
+    // Event listener for key press
+    window.addEventListener('keypress', handleKeyPress);
+
+    // // Start the game
+    // function startGame() {
+    //   startTime = Date.now();
+      
+    //   // setInterval(update, 1000 / 60); // Update at 60 FPS
+    //   // setInterval(spawnBubble, 1000); // Spawn a new bubble every second
+    //   setTimeout(endGame, duration * 1000); // End the game after the duration
+    // }
+
+
+    // // End the game
+    // function endGame() {
+    //   clearCanvas();
+    //   animate();
+    //   requestAnimationFrame(animate);
+    //   alert("Game over! Your score is: " + score);
+    // }
+
+    // // Start the game
+    // startGame();
+
+  </script>
+
+</body>
+
+</html>

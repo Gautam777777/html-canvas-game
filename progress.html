@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        #progressCanvas{
+           margin-top: 320px;
+           margin-left: 400px;
+           height: 50px;
+           background-image: url('./images/skybg2.png') !important;
+           background-size: cover !important;
+        }
+    </style>
+    
+</head>
+<body>
+    <canvas class="mycanvas" id="progressCanvas" width="400" height="30"></canvas>
+
+    <script>
+        // Get the canvas element
+        const canvas = document.getElementById("progressCanvas");
+        const context = canvas.getContext("2d");
+
+        // Create an image object
+        const image = new Image();
+
+        // Set the source of the image
+        image.src = "images/logo-sheet0.png";
+
+        // Wait for the image to load
+        image.onload = function() {
+        // Draw the image on the canvas
+        context.drawImage(image, 100, 100,200,150);
+
+        // You can also specify the size of the image
+        // context.drawImage(image, 0, 0, 200, 150);
+        };
+
+
+        // Set the initial progress value
+        let progress = 0;
+
+        // Function to update the progress bar
+        function updateProgressBar() {
+        // Clear the canvas
+        context.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw the progress bar background
+        context.fillStyle = "#f0f0f0";
+        context.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Draw the progress bar
+        const progressBarWidth = (progress / 100) * canvas.width;
+        context.fillStyle = "#00aaff";
+        context.fillRect(0, 0, progressBarWidth, canvas.height);
+
+         // Draw the percentage text
+        context.fillStyle = "#ffffff";
+        context.font = "14px Arial";
+        context.textAlign = "center";
+        context.fillText(`${progress}%`, canvas.width / 2, canvas.height / 2 + 5);
+        }
+
+         // Draw the percentage text
+        context.fillStyle = "#ffffff";
+        context.font = "14px Arial";
+        context.textAlign = "center";
+        context.fillText(progress + "%", canvas.width / 2, canvas.height / 2 + 5);
+
+        // Function to increase the progress value
+        function increaseProgress() {
+        if (progress < 100) {
+            progress += 1;
+            updateProgressBar();
+        }
+        }
+
+        // Call the increaseProgress function every second
+        setInterval(increaseProgress, 10);
+
+    </script>
+</body>
+</html>
