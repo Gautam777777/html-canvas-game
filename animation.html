@@ -32,11 +32,14 @@
     const explosionSound = document.getElementById('explosionSound');
 
     const particles = [];
-
+    
     // background images
     const backgroundImage = new Image();
     backgroundImage.src = 'images/skybg1.png';
 
+
+      // Variable to track the game state
+      let isPaused = false;
       // Create start/pause button
         const startPauseButton = document.createElement('button');
         startPauseButton.textContent = 'Paused';
@@ -48,8 +51,42 @@
         startPauseButton.style.background = 'Coral';
         document.body.appendChild(startPauseButton);
 
-       
 
+        // Function to handle the button click event
+        startPauseButton.addEventListener('click', function() {
+          // Toggle the game state
+          isPaused = !isPaused;
+
+          if (isPaused) {
+            // Game is paused
+            startPauseButton.textContent = 'Start';
+          } else {
+            // Game is resumed
+            startPauseButton.textContent = 'Paused';
+             // Restart the game loop
+              updateCanvas();
+          }
+        });
+
+        // Function to update the canvas (game loop)
+        function updateCanvas() {
+              // Check if the game is paused
+              if (isPaused) {
+              return;
+          }
+        }
+
+        // Clear the canvas
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw game elements
+
+        // Call the updateCanvas function again
+        requestAnimationFrame(updateCanvas);
+
+
+        // Call the updateCanvas function to start the game loop
+        updateCanvas();           
 
 
         // Create sound button
@@ -65,16 +102,11 @@
 
           
       
-
-
     // Function to play explosion sound
     function playExplosionSound() {
       explosionSound.currentTime = 0;
       explosionSound.play();
     }
-    
-
-
 
     // water
     const water = new Image();
@@ -116,9 +148,6 @@
     // Game configuration
     var duration = 30; // Duration of the game in seconds
 
-    
-
-
     /*************************************************************************/
 
     // Function to create fireworks explosion animation
@@ -158,8 +187,6 @@
       // requestAnimationFrame(animateExplosion);
     }
     
-
-
     // Function to create a new rocket
     function createrocket() {
       const rocket = {
@@ -188,8 +215,6 @@
       }
     }
 
-    
-
     // Function for background animation
     function backgroundAmimation() {
       // Draw background image
@@ -206,8 +231,6 @@
       // Update and draw boats
       ctx.drawImage(boatImage1, boatX, boatYPositions[0], boatWidth, boatHeight);
       ctx.drawImage(boatImage2, boatY, boatYPositions[1], boatWidth, boatHeight);
-
-      
 
       // Move the boats from left to right
       boatX += boatSpeed + 1;
@@ -247,8 +270,6 @@
     function clearCanvas(){
       ctx.clearRect(0, 0, canvas.width, canvas.height);
     }
-
-
     
     // Animation loop
     function animate() {
@@ -256,6 +277,7 @@
       backgroundAmimation();
       drawRocket();
       drawScore();
+
     }
 
     // Game loop
@@ -288,9 +310,6 @@
       }
     }
 
-    
-
-
     // Event listener for key press
     window.addEventListener('keypress', handleKeyPress);
 
@@ -318,5 +337,4 @@
   </script>
 
 </body>
-
 </html>
